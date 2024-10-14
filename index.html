@@ -1,1 +1,528 @@
-<h1>hello world!</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DC-AE</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.5; /* Adjust this value to make the spacing larger */
+            margin: 0;
+            padding: 0;
+            color: black;
+            background-image: url('asset/samples/pexels-photo-28821825.jpeg'); /* Background image */
+            background-size: contain; /* Cover the entire viewport */
+            background-attachment: fixed; /* Fixed background */
+            background-position: center;
+            direction: ltr;
+        }
+        .hero {
+            text-align: center;
+            padding: 50px 0;
+            background-color: #fff;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+        }
+        .hero h1 {
+            font-size: 5em;
+            margin: 0.2em 0;
+        }
+        .hero h2 {
+            font-size: 3em;
+            margin: 0.2em 0;
+            font-weight: normal;
+            line-height: 1.4; /* Adjust this value to make the spacing larger */
+        }
+        .hero p {
+            font-size: 1.5em;
+            margin-bottom: 1em;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 0.9em;
+            color: white;
+            background-color: black;
+            border-radius: 30px;
+            text-decoration: none;
+        }
+        .gallery-container {
+            max-width: 77%; /* Limit the width of the gallery */
+            margin: 0 auto; /* Center the gallery */
+            padding: 20px 0; /* Add some padding on top and bottom */
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr); /* 12 columns grid */
+            grid-auto-rows: 150px; /* Adjust row height */
+            gap: 10px;
+        }
+        .gallery-item {
+            overflow: hidden;
+            /*aspect-ratio: 1/1; !* Keep the aspect ratio of the images *!*/
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            cursor: pointer; /* Cursor change on hover */
+            border-radius: 10px; /* Rounded corners */
+            transition: transform 0.3s ease; /* Add smooth transition */
+        }
+        .gallery-item video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            cursor: pointer; /* Cursor change on hover */
+            border-radius: 10px; /* Rounded corners */
+            transition: transform 0.3s ease; /* Add smooth transition */
+        }
+        /* Image scaling on hover */
+        .gallery-item img:hover {
+            transform: scale(1.2);
+        }
+        /* Define specific grid item placements */
+        .item1 { grid-column: span 4; grid-row: span 4; }
+        .item2 { grid-column: span 8; grid-row: span 8; }
+
+        /* Modal styling */
+        #modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0, 0, 0, 0.9); /* Black w/ opacity */
+            justify-content: center; /* Horizontally center the image */
+            flex-direction: column;
+            align-items: center; /* Center align items vertically */
+        }
+        #modal img {
+            margin: auto;
+            display: block;
+            max-width: 77%;
+            max-height: 77%; /* Ensure the image doesn't overflow vertically */
+            object-fit: contain; /* Make sure the aspect ratio is preserved */
+        }
+        #modal-description {
+            color: white;
+            text-align: center;
+            margin-top: 10px; /* Adjust this value to move text closer to the image */
+            font-size: 1.2em;
+        }
+        .description {
+            font-family: Arial, sans-serif;
+            font-style: normal;
+            font-size: 17px;
+            line-height: 1.47;
+            color: #333;
+            /*color: black; !* Text color *!*/
+            letter-spacing: -0.022em;
+            font-weight: 400;
+            background-color: #fff; /* Solid background color that spans the entire width */
+            padding: 20px 0; /* Add vertical padding */
+            text-align: center; /* Center align text */
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            box-shadow: 2px 4px 12px #00000054;
+        }
+        .description-content {
+            /*background-color: rgba(255, 255, 255, 0.1); !* Semi-transparent background inside the section *!*/
+            /*border: 2px solid #555; !* Adding a lighter border *!*/
+            max-width: 65%; /* Limit the width to 80% of the screen */
+            margin: 0 auto; /* Center the content horizontally */
+            padding: 20px; /* Padding inside the border */
+            font-style: normal;
+            border-radius: 18px;
+            /*box-shadow: 2px 4px 12px #00000014;*/
+        }
+        .description-content h2 {
+            display: block;
+            color: black;
+            font-size: 1.5em;
+            line-height: 1.125;
+            letter-spacing: .004em;
+            font-weight: 600;
+            text-align: left; /* Center-align the h2 */
+            margin-block-start: 0.83em;
+            margin-block-end: 0.83em;
+            margin-inline-start: 0px;
+            margin-inline-end: 0px;
+            font-style: normal;
+        }
+        .description-content p {
+            font-size: 1.1em;
+            text-align: left; /* Left-align the p */
+            font-weight: normal;
+        }
+        .citation {
+            /*background-color: #333; !* Solid background color that spans the entire width *!*/
+            font-family: Arial, sans-serif;
+            color: black;
+            padding: 10px;
+            text-align: center;
+            margin-top: 10px;
+            box-shadow: 2px 4px 12px #00000054;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+        .citation-content {
+            /*background-color: rgba(255, 255, 255, 0.1); !* Semi-transparent background inside the section *!*/
+            /*border: 2px solid #444; !* Adding a lighter border *!*/
+            border-radius: 15px; /* Rounded corners */
+            font-size: 0.8em;
+            max-width: 65%; /* Limit the width to 80% of the screen */
+            margin: 0 auto; /* Center the content horizontally */
+            padding: 0px; /* Padding inside the border */
+        }
+        .citation-content h2 {
+            font-size: 2em;
+            text-align: left;
+            font-weight: normal;
+        }
+        .citation pre {
+            text-align: left;
+            white-space: pre-wrap; /* Allows text to wrap */
+        }
+        .footer {
+            background-color: #222;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+        .footer a {
+            color: #00d1b2;
+            text-decoration: none;
+        }
+        .inserted-image {
+            max-width: 80%;  /* Set the maximum width for the image */
+            height: auto;    /* Ensure the height adjusts automatically to maintain aspect ratio */
+            margin: 20px 0;  /* Add space above and below the image */
+            display: block;  /* Make sure the image is treated as a block-level element */
+            margin-left: auto; /* Center the image horizontally */
+            margin-right: auto;
+            margin-top: -10px;
+            border-radius: 10px;
+            box-shadow: 2px 4px 12px #00000024;
+        }
+        .video-container {
+            text-align: center;  /* Center the video horizontally */
+            margin: 20px 0;  /* Add some vertical margin around the video */
+        }
+        video {
+            max-width: 100%;  /* The video will scale to fit the container */
+            height: auto;  /* Maintain the video's aspect ratio */
+            border-radius: 10px;  /* Rounded corners for the video */
+            box-shadow: 2px 4px 12px #00000054;
+        }
+        .logo {
+            color: black;
+            display: flex;
+            justify-content: center;
+            /*justify-content: left;*/
+            align-items: center;
+            text-align: center;
+            gap: 60px;
+        }
+        .logo-sup {
+            position: absolute;
+            top: -5px; /* Adjust this value to position it closer to the top */
+            right: -10px; /* Adjust this value to move it horizontally */
+            font-size: 14px; /* Increase the size of the superscript */
+            color: black; /* Change the color if needed */
+          }
+
+        @media (max-width: 4096px) {
+            .gallery {
+                /*grid-template-columns: repeat(auto-fit, minmax(40px, 1fr)); !* Adjust columns for smaller screens *!*/
+                grid-auto-columns: 100px; /* Adjust columns for smaller screens */
+                grid-auto-rows: 200px; /* Set a fixed height for the grid items */
+            }
+        }
+        @media (max-width: 2048px) {
+            .gallery {
+                /*grid-template-columns: repeat(auto-fit, minmax(40px, 1fr)); !* Adjust columns for smaller screens *!*/
+                grid-auto-columns: 60px; /* Adjust columns for smaller screens */
+                grid-auto-rows: 90px; /* Set a fixed height for the grid items */
+            }
+        }
+        @media (min-width: 2048px) {
+            .description-content {
+                max-width: 728px; /* Limit the width to 80% of the screen */
+                padding: 10px; /* Padding inside the border */
+            }
+            .citation-content {
+                max-width: 728px; /* Limit the width to 80% of the screen */
+                padding: 10px; /* Padding inside the border */
+            }
+            .inserted-image {
+                max-width: 1024px; /* Limit the width to 80% of the screen */
+                padding: 10px; /* Padding inside the border */
+            }
+            /* video {
+                max-width: 1024px;
+            } */
+        }
+        @media (max-width: 1024px) {
+            .gallery {
+                /*grid-template-columns: repeat(auto-fit, minmax(40px, 1fr)); !* Adjust columns for smaller screens *!*/
+                grid-auto-columns: 40px; /* Adjust columns for smaller screens */
+                grid-auto-rows: 70px; /* Set a fixed height for the grid items */
+            }
+        }
+        @media (min-width: 1024px) {
+            .description-content {
+                max-width: 728px; /* Limit the width to 80% of the screen */
+                padding: 10px; /* Padding inside the border */
+            }
+            .citation-content {
+                max-width: 728px; /* Limit the width to 80% of the screen */
+                padding: 10px; /* Padding inside the border */
+            }
+            .inserted-image {
+                max-width: 960px; /* Limit the width to 80% of the screen */
+                padding: 5px; /* Padding inside the border */
+            }
+            /* video {
+                max-width: 728px; 
+            } */
+        }
+        @media (max-width: 768px) {
+            .gallery {
+                /*grid-template-columns: repeat(auto-fit, minmax(40px, 1fr)); !* Adjust columns for smaller screens *!*/
+                grid-auto-columns: 20px; /* Adjust columns for smaller screens */
+                grid-auto-rows: 30px; /* Set a fixed height for the grid items */
+                gap: 5px;
+            }
+            .gallery-container {
+                max-width: 85%; /* Limit the width of the gallery */
+                padding: 10px 0; /* Add some padding on top and bottom */
+            }
+            .hero h1 {
+                font-size: 3em;
+            }
+            .hero h2 {
+                font-size: 2em;
+            }
+            .hero p {
+                font-size: 1em;
+            }
+            .description-content {
+                max-width: 92%; /* Limit the width to 80% of the screen */
+                padding: 10px; /* Padding inside the border */
+            }
+            .citation-content {
+                max-width: 92%; /* Limit the width to 80% of the screen */
+                padding: 10px; /* Padding inside the border */
+            }
+            .inserted-image {
+                max-width: 95%; /* Limit the width to 80% of the screen */
+                padding: 5px; /* Padding inside the border */
+            }
+            /* video {
+                max-width: 92%; 
+            } */
+            .logo {
+                gap: 20px;
+            }
+        }
+        /* Dark mode */
+        @media (prefers-color-scheme: dark) {
+            .description {
+                background-color: #333; /* Dark color for dark mode */
+                color: white; /* Light text color for dark mode */
+            }
+            .description h2 {
+                background-color: #333; /* Dark color for dark mode */
+                color: white; /* Light text color for dark mode */
+            }
+            .citation {
+                background-color: #333; /* Dark color for dark mode */
+                color: white; /* Light text color for dark mode */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <div style="display: flex; justify-content: center; align-items: center; margin-left: -50px;">
+            <h1 style="margin: 0;">DC-AE</h1>
+        </div>
+        <h2>Deep Compression Autoencoder for <br>
+            Efficient High-resolution diffusion models</h2>
+        <!-- Add author and institution information -->
+        <div style="margin-top: 20px; text-align: center;">
+            <p style="font-size: 1.3em; margin-bottom: 5px;">
+                <a href="https://scholar.google.com.hk/citations?hl=zh-CN&user=mWdYMZ8AAAAJ" target="_blank" style="color: #76b900;">Junyu Chen</a><sup>1,2*</sup>,
+                <a href="https://han-cai.github.io//" target="_blank" style="color: #76b900;">Han Cai</a><sup>3*†</sup>,
+                <a href="https://lawrence-cj.github.io/" target="_blank" style="color: #76b900;">Junsong Chen</a><sup>3</sup>,
+                <a href="https://xieenze.github.io/" target="_blank" style="color: #76b900;">Enze Xie</a><sup>3</sup>,<br>
+                <a href="https://ys-2020.github.io/" target="_blank" style="color: #76b900;">Shang Yang</a><sup>1</sup>,
+                <a href="http://kentang.net/" target="_blank" style="color: #76b900;">Haotian Tang</a><sup>1</sup>,
+                <a href="https://lmxyy.me//" target="_blank" style="color: #76b900;">Muyang Li</a><sup>1</sup>,
+                <a href="https://scholar.google.com/citations?user=OI7zFmwAAAAJ&hl=en/" target="_blank" style="color: #76b900;">Yao Lu</a><sup>3</sup>,
+                <a href="https://hanlab.mit.edu/songhan/" target="_blank" style="color: #76b900;">Song Han</a><sup>1,3</sup>
+            </p>
+            <p style="font-size: 1.2em; color: #888;">
+                <sup>1</sup>MIT, <sup>2</sup>Tsinghua University, <sup>3</sup>NVIDIA
+                <br>
+                *Equal contribution
+                †Project lead
+            </p>
+        </div>
+<!--        <div style="overflow: hidden; background-color: #6699cc;">-->
+        <div style="overflow: hidden; background-color: #fff;">
+          <div class="logo" style="padding: 12px;">
+            <a href="https://hanlab.mit.edu/" style="text-decoration: none; font-size: 16px;">
+              <img src="assets/mit_han.png" alt="MIT Logo" style="width: auto; height: 30px;">
+            </a>
+            <a href="" style="text-decoration: none; font-size: 16px;">
+              <img src="assets/thu.jpg" alt="THU Logo" style="width: auto; height: 40px;">
+            </a>
+            <a href="https://www.nvidia.com/" style="text-decoration: none; font-size: 16px;">
+                <img src="https://nv-tlabs.github.io/3DStyleNet/assets/nvidia.svg" alt="NVIDIA Logo" style="width: auto; height: 30px;">
+              </a>
+          </div>
+        </div>
+
+        <a href="#" class="button">Paper</a>
+        <a href="https://github.com/mit-han-lab/efficientvit" class="button">Code</a>
+    </div>
+
+    <div class="gallery-container">
+        <section class="gallery" id="gallery">
+            <div class="gallery-item item1">
+                <video controls autoplay loop>
+                    <source src="assets/videos/reconstruction/8_f64.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <div class="gallery-item item2">
+                <video controls autoplay loop>
+                    <source src="assets/videos/diffusion/speed_comparison.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <div class="gallery-item item1">
+                <video controls autoplay loop>
+                    <source src="assets/videos/reconstruction/3_f64.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </section>
+    </div>
+
+    <div class="gallery-container">
+        <section class="gallery" id="gallery">
+        <div class="gallery-item item1"><img src="assets/images/diffusion/text_to_image/logo_cropped.png" alt="Image 1" data-description='a cyberpunk cat with a neon sign that says “DC-AE”'></div>
+        <div class="gallery-item item1"><img src="assets/images/diffusion/text_to_image/Chinese architecture, ancient style,mountain, bird, lotus, pond, big tree, 4K Unity, octane renderin.jpg" alt="Image 2" data-description='Chinese architecture, ancient style,mountain, bird, lotus, pond, big tree, 4K Unity, octane rendering.'></div>
+        <div class="gallery-item item1"><img src="assets/images/diffusion/text_to_image/A serene lakeside during autumn with trees displaying a palette of fiery colors..jpg" alt="Image 3" data-description='Serene lakeside during autumn with trees displaying a palette of fiery colors.'></div>
+
+        <div class="gallery-item item1"><img src="assets/images/diffusion/text_to_image/A blue jay standing on a large basket of rainbow macarons..jpg" alt="Image 4" data-description='A blue jay standing on a large basket of rainbow macarons.'></div>
+        <div class="gallery-item item1"><img src="assets/images/diffusion/text_to_image/a close up of a helmet on a person, digital art, inspired by Han Gan, cloisonnism, female, victorian.jpg" alt="Image 5" data-description="A close up of a helmet on a person, digital art, inspired by Han Gan, cloisonnism, female, victorian armor, ultramarine, best of behance, anton fadeev 8 k, fined detail, sci-fi character, elegant armor, fantasy art behance"></div>
+        <div class="gallery-item item1"><img src="assets/images/diffusion/text_to_image/beautiful scene.jpg" alt="Image 6" data-description='Beautiful scene'></div>
+        </section>
+    </div>
+
+    <!-- The Modal -->
+    <div id="modal" onclick="this.style.display='none'">
+      <img id="modal-img" src="">
+      <div id="modal-description"></div> <!-- Text for description -->
+    </div>
+
+    <section class="description">
+        <div class="description-content">
+          <h2>About DC-AE</h2>
+          <p>We present Deep Compression Autoencoder (DC-AE), a new family of autoencoders for accelerating high-resolution diffusion models. Existing autoencoders have demonstrated impressive results at a moderate spatial compression ratio (e.g., 8x), but fail to maintain satisfactory reconstruction accuracy for high spatial compression ratios (e.g., 64x). We address this challenge by introducing two key techniques: (1) <strong style="font-size: 18px;">Residual Autoencoding</strong>, where we design our models to learn residuals based on the space-to-channel transformed features to alleviate the optimization difficulty of high spatial-compression autoencoders; (2) <strong style="font-size: 18px;">Decoupled High-Resolution Adaptation</strong>, an efficient decoupled three-phase training strategy for mitigating the generalization penalty of high spatial-compression autoencoders. With these designs, we improve the autoencoder's spatial compression ratio up to 128 while maintaining the reconstruction quality. Applying our \modelshort to latent diffusion models, we achieve significant speedup without accuracy drop. For example, on ImageNet 512x512, our DC-AE provides <strong style="font-size: 18px;">19.1x</strong> inference speedup and <strong style="font-size: 18px;">17.9x</strong> training speedup on H100 GPU for UViT-H while achieving a better FID, compared with the widely used SD-VAE-f8 autoencoder.</p>
+        </div>
+
+        <!-- Insert your image here -->
+        <div>
+            <img width="30%" src="assets/images/diffusion/uvit_speed_comparison.jpg" alt="Inference throughput comparison to SD-VAE-f8 on ImageNet 512x512 with UViT Variants" class="inserted-image">
+        </div>
+
+        <div class="description-content">
+          <h2>Method</h2>
+          <p>
+              <!-- &nbsp;&nbsp;&nbsp;&nbsp;&bull;&nbsp;&nbsp;  <strong style="font-size: 18px;">Deep Compression Autoencoder: </strong>
+              We introduce a new Autoencoder (AE) that aggressively increases the scaling factor to 32.
+              Compared with AE-F8, our AE-F32 outputs 16x fewer latent tokens, which is crucial for efficient training
+              and generating ultra-high-resolution images, such as 4K resolution.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&bull;&nbsp;&nbsp; <strong style="font-size: 18px;">Efficient Linear DiT: </strong>
+              We introduce a new linear DiT to replace vanilla quadratic attention modules, reducing the computational complexity from O(N<span style="font-size: 0.8em;"><sup>2</sup></span>) to O(N)
+              At the same time, we propose Mix-FFN, which integrates 3x3 depth-wise convolution into MLP to aggregate the local information of tokens.
+              We argue that linear attention can achieve results comparable to vanilla attention with proper design
+              and is more efficient for high-resolution image generation (e.g., accelerating by 1.7x at 4K).
+              Additionally, the indirect benefit of Mix-FFN is that we do not need position encoding (NoPE).
+              For the first time, we removed the positional embedding in DiT and find no quality loss.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&bull;&nbsp;&nbsp; <strong style="font-size: 18px;">Decoder-only Small LLM as Text Encoder: </strong>
+              We use the latest Large Language Model (LLM), Gemma, as the text encoder to enhance understanding and reasoning in user prompts.
+              While text-to-image models have improved, most still rely on CLIP or T5 for text encoding, which often lack strong comprehension and instruction-following skills.
+              Decoder-only LLMs like Gemma offer superior text understanding and instruction-following abilities.
+              In this work, we tackle training instability when adopting an LLM as a text encoder and
+              design complex human instructions (CHI) to leverage Gemma’s in-context learning and reasoning, improving image-text alignment.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&bull;&nbsp;&nbsp; <strong style="font-size: 18px;">Efficient Training and Inference Strategy: </strong>
+              We propose automatic labeling and training strategies to improve text-image consistency.
+              For each image, multiple VLMs generate re-captions, leveraging their complementary strengths to enhance caption diversity.
+              Additionally, we introduce a CLIPScore-based training strategy, dynamically selecting high-CLIPScore captions based on probability,
+              improving training convergence and text-image alignment. We also propose a <strong style="font-size: 1.05em;">Flow-DPM-Solver</strong>,
+              reducing inference sampling steps from 28-50 to 14-20 compared to the Flow-Euler-Solver, while achieving better results.</div> -->
+          <p>
+
+        <div>
+            <img src="asset/content/incremental.jpg" alt="details of difference parts for efficiency improvement" class="inserted-image">
+        </div>
+
+        <!--BibTex citation -->
+        <section class="citation" id="BibTeX">
+            <div class="citation-content">
+                <h2 class="title">BibTeX</h2>
+                <pre><code>@misc{,
+                }</code></pre>
+            </div>
+        </section>
+
+    </section>
+    <!--End BibTex citation -->
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="container">
+            <div class="columns is-centered">
+                <div class="column is-8">
+                    <div class="content">
+                        <p class="has-text-centered">Total clicks: <span id="busuanzi_value_site_pv"></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- End Footer -->
+
+    <script>
+      // Function to open the modal and display the clicked image and description
+      function openModal(img) {
+          var modal = document.getElementById("modal");
+          var modalImg = document.getElementById("modal-img");
+          var modalDescription = document.getElementById("modal-description");
+
+          modal.style.display = "flex";
+          modalImg.src = img.src;
+          modalDescription.textContent = img.getAttribute('data-description'); // Get description from data-description attribute
+      }
+
+      // Add click event listeners to all images in the gallery with their descriptions
+      const images = document.querySelectorAll('.gallery-item img');
+      images.forEach((img) => {
+        img.addEventListener('click', () => openModal(img));
+      });
+    </script>
+
+</body>
+</html>
