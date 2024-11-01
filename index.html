@@ -525,4 +525,152 @@
     </script>
 
 </body>
+
+
+<head>
+    <style>
+        .splitscreen {
+            display: flex;
+        }
+        .splitscreen .split-0 {
+            flex: 33%;
+        }
+        .splitscreen .split-1 {
+            flex: 33%;
+        }
+        .splitscreen .split-2 {
+            flex: 33%;
+        }
+
+        .image-comparison-container-0, .image-comparison-container-1, .image-comparison-container-2 {
+            background-color: #fff; /* Solid background color that spans the entire width */
+        }
+        .image-comparison-content-0, .image-comparison-content-1, .image-comparison-content-2 {
+            position: relative;
+            width: 440px;  /* Adjust the width as needed */
+            height: 440px; /* Adjust the height as needed */
+            overflow: hidden; /* Make sure overflow isn't hiding any part of the images */
+            margin: 0 auto;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            cursor: ew-resize;
+            border-radius: 10px;
+        }
+        .image-comparison-content-0 img, .image-comparison-content-1 img, .image-comparison-content-2 img {
+            position: absolute;
+            width: 100%;
+            height: 99%;
+            background-color: #fff;
+            object-fit: contain; /* Use contain to ensure the whole image is visible */
+        }
+        .image-comparison-content-0 .slider-0, .image-comparison-content-1 .slider-1, .image-comparison-content-2 .slider-2 {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 2px;
+            background-color: #fff;
+            z-index: 10;
+        }
+        .image-comparison-content-0 .image-0-2, .image-comparison-content-1 .image-1-2, .image-comparison-content-2 .image-2-2 {
+            clip-path: inset(0 0 0 50%);
+        }
+    </style>
+</head>
+
+<div class="splitscreen">
+    <div class="split-0">
+        <section class="image-comparison-container-0">
+            <div class="image-comparison-content-0">
+                <img src="assets/images/reconstruction/0_ours_f64c128_with_text.png" alt="Image 1" class="image-0-1"/>
+                <img src="assets/images/reconstruction/0_sd_f64c128_with_text.png" alt="Image 2" class="image-0-2"/>
+                <div class="slider-0"></div>
+            </div>
+        </section>
+    </div>
+    <div class="split-1">
+        <section class="image-comparison-container-1">
+            <div class="image-comparison-content-1">
+                <img src="assets/images/reconstruction/8_ours_f64c128_with_text.png" alt="Image 1" class="image-1-1"/>
+                <img src="assets/images/reconstruction/8_sd_f64c128_with_text.png" alt="Image 2" class="image-1-2"/>
+                <div class="slider-1"></div>
+            </div>
+        </section>
+    </div>
+    <div class="split-2">
+        <section class="image-comparison-container-2">
+            <div class="image-comparison-content-2">
+                <img src="assets/images/reconstruction/10_ours_f64c128_with_text.png" alt="Image 1" class="image-1-1"/>
+                <img src="assets/images/reconstruction/10_sd_f64c128_with_text.png" alt="Image 2" class="image-1-2"/>
+                <div class="slider-2"></div>
+            </div>
+        </section>
+    </div>
+</div>
+
+
+<script>
+    const container = document.querySelector('.image-comparison-content-0');
+    const slider = document.querySelector('.slider-0');
+    const image2 = document.querySelector('.image-0-2');
+  
+    container.addEventListener('mousemove', (e) => {
+      const rect = container.getBoundingClientRect();
+      let xPos = e.clientX - rect.left;
+  
+      if (xPos < 0) xPos = 0;
+      if (xPos > rect.width) xPos = rect.width;
+  
+      const percentage = (xPos / rect.width) * 100;
+  
+      slider.style.left = `${percentage}%`;
+      // slider_black.style.left = `${percentage}%`;
+      image2.style.clipPath = `inset(0 0 0 ${percentage}%)`;
+      // image4.style.clipPath = `inset(0 0 0 ${percentage}%)`;
+    });
+</script>
+
+<script>
+    const container1 = document.querySelector('.image-comparison-content-1');
+    const slider1 = document.querySelector('.slider-1');
+    const image1_2 = document.querySelector('.image-1-2');
+  
+    container1.addEventListener('mousemove', (e) => {
+      const rect = container1.getBoundingClientRect();
+      let xPos = e.clientX - rect.left;
+  
+      if (xPos < 0) xPos = 0;
+      if (xPos > rect.width) xPos = rect.width;
+  
+      const percentage = (xPos / rect.width) * 100;
+  
+      slider1.style.left = `${percentage}%`;
+      image1_2.style.clipPath = `inset(0 0 0 ${percentage}%)`;
+    });
+</script>
+
+<script>
+    const container2 = document.querySelector('.image-comparison-content-2');
+    const slider2 = document.querySelector('.slider-2');
+    const image2_2 = document.querySelector('.image-2-2');
+  
+    container2.addEventListener('mousemove', (e) => {
+      const rect = container2.getBoundingClientRect();
+      let xPos = e.clientX - rect.left;
+  
+      if (xPos < 0) xPos = 0;
+      if (xPos > rect.width) xPos = rect.width;
+  
+      const percentage = (xPos / rect.width) * 100;
+  
+      slider2.style.left = `${percentage}%`;
+      image2_2.style.clipPath = `inset(0 0 0 ${percentage}%)`;
+    });
+</script>
+
+<video controls muted autoplay loop>
+    <source src="assets/videos/diffusion/speed_comparison.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+</video>
+
 </html>
